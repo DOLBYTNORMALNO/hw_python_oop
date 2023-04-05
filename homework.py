@@ -81,7 +81,8 @@ class SportsWalking(Training):
     KMH_TO_MS: float = 0.278  # Км/час в м/с
     CM_TO_M: int = 100  # См в м
 
-    def __init__(self, action: int, duration: float, weight: float, height: int):
+    def __init__(self, action: int, duration: float,
+                 weight: float, height: int):
         self.height = height
         super().__init__(action, duration, weight)
 
