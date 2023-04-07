@@ -10,11 +10,6 @@ class InfoMessage:
     speed: float
     calories: float
 
-    # Не понимаю как применить ниже asdict(),
-    # нужно создать пустой словарь,
-    # обозвать его константой phrase и заполнять
-    # ключи, как 'Тип тренировки:' и значения,
-    # как self.training_type, а в конце просто печатать словарь?
     def get_message(self):
         return (
             f'Тип тренировки: {self.training_type}; '
@@ -51,8 +46,7 @@ class Training:
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
         raise NotImplementedError(
-            f'Определите get_spent_calories в {self.name}.'
-        )
+            f'Определите get_spent_calories в {type(self).__name__}')
 
     def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
@@ -98,10 +92,7 @@ class SportsWalking(Training):
                  height: int
                  ) -> None:
         self.height = height
-        super().__init__(action,
-                         duration,
-                         weight
-                         )
+        super().__init__(action, duration, weight)
 
     def get_spent_calories(self) -> float:
         return ((self.K_1 * self.weight
@@ -125,10 +116,7 @@ class Swimming(Training):
                  ) -> None:
         self.length_pool = length_pool
         self.count_pool = count_pool
-        super().__init__(action,
-                         duration,
-                         weight
-                         )
+        super().__init__(action, duration, weight)
 
     def get_mean_speed(self) -> float:
         return (self.length_pool * self.count_pool
@@ -148,13 +136,14 @@ def read_package(workout_type: str, data: list[int]) -> Training:
                         'SWM': Swimming
                         }
     if workout_type not in type_of_training:
+        suggestion = ('Введите тип тренировки:'
+                      + ''.join(type_of_training.keys()))
         raise ValueError(
             f'Неизвестный тип тренировки ({workout_type}),'
-            f'введите тип тренировки.'
+            f'{suggestion}'
         )
 
-    training = type_of_training[workout_type](*data)
-    return training
+    return type_of_training[workout_type](*data)
 
 
 def main(training: Training) -> None:
